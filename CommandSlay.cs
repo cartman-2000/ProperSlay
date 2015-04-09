@@ -32,33 +32,26 @@ namespace PSlay
             }
 
             // Check to see if what they put in the command is a valid playername or SteamID64 number, and fail if it isn't.
-            long parse = 0;
-            if (long.TryParse(command, out parse))
-            {
-                try
-                {
-                    SteamPlayer targetSteamID = null;
-                    PlayerTool.tryGetSteamPlayer(command, out targetSteamID);
-                    target = RocketPlayer.FromCSteamID(targetSteamID.SteamPlayerID.CSteamID);
-                }
-                catch
-                {
-                    // No match.
-                }
+            ulong ulCSteamID = 0;
+            if (ulong.TryParse(command, out ulCSteamID))
+            {   
+                target = RocketPlayer.FromCSteamID((Steamworks.CSteamID)ulCSteamID);
             }
             else
             {
                 target = RocketPlayer.FromName(command);
             }
-            if (target == null)
+
+            // Causes the target player to suicide, "if" the player is valid.
+            try
+            {
+                target.Suicide();
+            }
+            catch
             {
                 RocketChatManager.Say(caller, String.Format("Cannot find player: {0}", command));
                 return;
             }
-
-            // Causes the target player to suicide.
-            target.Suicide();
-
             // Run with different messages, depending on whether the command was ran from the console, or by a player. If caller equals null, it was sent from the console.
             if (caller != null)
             {
