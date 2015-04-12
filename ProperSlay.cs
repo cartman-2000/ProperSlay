@@ -13,21 +13,19 @@ namespace PSlay
             Instance = this;
         }
 
+        // Returns a Steamworks.CSteamID from a string, throws a FormatException if the string isn't a valid unsigned number, or isn't in the valid range.
         public Steamworks.CSteamID StringToCSteamID(string sCSteamID)
         {
-            ulong ulCSteamID = 0;
+            ulong ulCSteamID;
             if (ulong.TryParse(sCSteamID, out ulCSteamID))
             {
-                if (!(ulCSteamID >= (ulong)0x0110000100000000 && ulCSteamID <= (ulong)0x0170000000000000))
+                if (ulCSteamID >= (ulong)0x0110000100000000 && ulCSteamID <= (ulong)0x0170000000000000)
                 {
-                    throw new FormatException(String.Format("Unable to convert {0} to a CSteamID, not in the valid range.", sCSteamID));
+                    return (Steamworks.CSteamID)ulCSteamID;
                 }
+                throw new FormatException(String.Format("Unable to convert {0} to a CSteamID, not in the valid range.", sCSteamID));
             }
-            else
-            {
-                throw new FormatException(String.Format("Unable to convert {0} to a CSteamID, not a number.", sCSteamID));
-            }
-            return (Steamworks.CSteamID)ulCSteamID;
+            throw new FormatException(String.Format("Unable to convert {0} to a CSteamID, not a valid unsigned number.", sCSteamID));
         }
     }
 }
