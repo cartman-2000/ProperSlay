@@ -32,12 +32,11 @@ namespace PSlay
             }
 
             // Check to see if what they put in the command is a valid playername or SteamID64 number, and fail if it isn't.
-            ulong ulCSteamID = 0;
-            if (ulong.TryParse(command, out ulCSteamID))
-            {   
-                target = RocketPlayer.FromCSteamID((Steamworks.CSteamID)ulCSteamID);
+            try
+            {
+                target = RocketPlayer.FromCSteamID(ProperSlay.Instance.StringToCSteamID(command));
             }
-            else
+            catch
             {
                 target = RocketPlayer.FromName(command);
             }
