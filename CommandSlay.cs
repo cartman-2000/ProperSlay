@@ -34,7 +34,7 @@ namespace PSlay
             // Check to see if what they put in the command is a valid playername or SteamID64 number, and fail if it isn't.
             try
             {
-                target = RocketPlayer.FromCSteamID(ProperSlay.Instance.StringToCSteamID(command));
+                target = RocketPlayer.FromCSteamID(command.StringToCSteamID());
             }
             catch
             {

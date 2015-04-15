@@ -56,8 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProperSlay.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="CommandSlay.cs" />
+    <Compile Include="ProperSlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
