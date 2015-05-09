@@ -18,7 +18,7 @@ namespace PSlay
 
         public string Help
         {
-            get { return "[playername|SteamID64] - Slays the player."; }
+            get { return "[\"playername\"|SteamID64] - Slays the player."; }
         }
 
         public void Execute(RocketPlayer caller, params string[] command)
@@ -29,6 +29,20 @@ namespace PSlay
             if (command.Length == 0)
             {
                 RocketChatManager.Say(caller, this.Help);
+                return;
+            }
+
+            if (command.Length == 1)
+            {
+                if (command[0].Contains("/"))
+                {
+                    command = Parser.getComponentsFromSerial(command[0], '/');
+                }
+            }
+
+            if (command.Length > 1)
+            {
+                RocketChatManager.Say(caller, "Invalid arguments in the command.");
                 return;
             }
 
