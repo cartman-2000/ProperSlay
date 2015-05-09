@@ -21,11 +21,12 @@ namespace PSlay
             get { return "[playername|SteamID64] - Slays the player."; }
         }
 
-        public void Execute(RocketPlayer caller, string command)
+        public void Execute(RocketPlayer caller, params string[] command)
         {
             RocketPlayer target = null;
             // Return help on empty command.
-            if (command == "")
+            
+            if (command.Length == 0)
             {
                 RocketChatManager.Say(caller, this.Help);
                 return;
@@ -34,11 +35,11 @@ namespace PSlay
             // Check to see if what they put in the command is a valid playername or SteamID64 number, and fail if it isn't.
             try
             {
-                target = RocketPlayer.FromCSteamID(command.StringToCSteamID());
+                target = RocketPlayer.FromCSteamID(command[0].StringToCSteamID());
             }
             catch
             {
-                target = RocketPlayer.FromName(command);
+                target = RocketPlayer.FromName(command[0]);
             }
 
             // Causes the target player to suicide, "if" the player is valid.
@@ -48,7 +49,7 @@ namespace PSlay
             }
             catch
             {
-                RocketChatManager.Say(caller, String.Format("Cannot find player: {0}", command));
+                RocketChatManager.Say(caller, String.Format("Cannot find player: {0}", command[0]));
                 return;
             }
             // Run with different messages, depending on whether the command was ran from the console, or by a player. If caller equals null, it was sent from the console.
