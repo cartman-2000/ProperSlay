@@ -46,6 +46,12 @@ namespace PSlay
                 return;
             }
 
+            if (command[0].Trim() == String.Empty || command[0].Trim() == "0")
+            {
+                RocketChatManager.Say(caller, "Invalid player name in command.");
+                return;
+            }
+
             // Check to see if what they put in the command is a valid playername or SteamID64 number, and fail if it isn't.
             try
             {

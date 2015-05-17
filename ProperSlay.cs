@@ -4,7 +4,7 @@ using System;
 
 namespace PSlay
 {
-    class ProperSlay : RocketPlugin
+    public class ProperSlay : RocketPlugin
     {
         public static ProperSlay Instance;
 
