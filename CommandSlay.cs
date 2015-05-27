@@ -22,7 +22,12 @@ namespace PSlay
 
         public string Help
         {
-            get { return "[\"playername\"|SteamID64] - Slays the player."; }
+            get { return "Slays the player."; }
+        }
+
+        public string Syntax
+        {
+            get { return "<\"Playername\"|SteamID64>"; }
         }
 
         public void Execute(RocketPlayer caller, string[] command)
@@ -32,7 +37,7 @@ namespace PSlay
             
             if (command.Length == 0)
             {
-                RocketChat.Say(caller, this.Help);
+                RocketChat.Say(caller, this.Syntax + " - " + this.Help);
                 return;
             }
 
