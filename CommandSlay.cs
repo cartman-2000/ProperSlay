@@ -4,6 +4,7 @@ using Rocket.Unturned.Commands;
 using Rocket.Unturned.Player;
 using SDG;
 using System;
+using System.Collections.Generic;
 
 
 namespace PSlay
@@ -28,6 +29,11 @@ namespace PSlay
         public string Syntax
         {
             get { return "<\"Playername\"|SteamID64>"; }
+        }
+
+        public List<string> Aliases
+        {
+            get { return new List<string>(); }
         }
 
         public void Execute(RocketPlayer caller, string[] command)
