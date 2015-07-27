@@ -1,15 +1,16 @@
-﻿using Rocket.Core.Logging;
-using Rocket.Unturned;
+﻿using System;
+using System.Collections.Generic;
+using Rocket.API;
+using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Commands;
 using Rocket.Unturned.Player;
-using System;
-using System.Collections.Generic;
 
 namespace PSlay
 {
     public class CommandSlay : IRocketCommand
     {
-        public bool RunFromConsole
+        public bool AllowFromConsole
         {
             get { return true; }
         }
@@ -21,7 +22,7 @@ namespace PSlay
 
         public string Help
         {
-            get { return "Slays the player."; }
+            get { return "Slays a player."; }
         }
 
         public string Syntax
@@ -34,37 +35,32 @@ namespace PSlay
             get { return new List<string>(); }
         }
 
-        public void Execute(RocketPlayer caller, string[] command)
+        public List<string> Permissions
         {
-            RocketPlayer target = null;
+            get { return new List<string>() { "ProperSlay.slay" }; }
+        }
+
+        public void Execute(IRocketPlayer caller, string[] command)
+        {
+            UnturnedPlayer target = command.GetUnturnedPlayerParameter(0);
+            UnturnedPlayer unturnedCaller = UnturnedPlayer.FromName(caller.Id);
             // Return help on empty command.
-            
             if (command.Length == 0)
             {
-                RocketChat.Say(caller, this.Syntax + " - " + this.Help);
+                UnturnedChat.Say(caller, ProperSlay.Instance.Translations.Instance.Translate("slay_command_help"));
                 return;
             }
 
             if (command.Length > 1)
             {
-                RocketChat.Say(caller, "Invalid arguments in the command.");
+                UnturnedChat.Say(caller, ProperSlay.Instance.Translations.Instance.Translate("too_many_args"));
                 return;
             }
 
             if (command[0].Trim() == String.Empty || command[0].Trim() == "0")
             {
-                RocketChat.Say(caller, "Invalid player name in command.");
+                UnturnedChat.Say(caller, ProperSlay.Instance.Translations.Instance.Translate("playername_not_found", command[0]));
                 return;
-            }
-
-            // Check to see if what they put in the command is a valid playername or SteamID64 number, and fail if it isn't.
-            try
-            {
-                target = RocketPlayer.FromCSteamID(command[0].StringToCSteamID());
-            }
-            catch
-            {
-                target = RocketPlayer.FromName(command[0]);
             }
 
             // Causes the target player to suicide, "if" the player is valid.
@@ -74,20 +70,20 @@ namespace PSlay
             }
             catch
             {
-                RocketChat.Say(caller, String.Format("Cannot find player: {0}", command[0]));
+                UnturnedChat.Say(caller, ProperSlay.Instance.Translations.Instance.Translate("playername_not_found", command[0]));
                 return;
             }
             // Run with different messages, depending on whether the command was ran from the console, or by a player. If caller equals null, it was sent from the console.
             if (caller != null)
             {
-                RocketChat.Say(caller.CSteamID, String.Format("You have slayed player: {0}.", target.CharacterName));
-                RocketChat.Say(target.CSteamID, String.Format("Admin: {0} has slayed you.", caller.CharacterName));
-                Logger.Log(String.Format("Admin: {0} [{1}] ({2}), has slayed: {3} [{4}] ({5})", caller.CharacterName, caller.SteamName, caller.CSteamID, target.CharacterName, target.SteamName, target.CSteamID));
+                UnturnedChat.Say(caller, ProperSlay.Instance.Translations.Instance.Translate("admin_slay_caller", target.CharacterName));
+                UnturnedChat.Say(target, ProperSlay.Instance.Translations.Instance.Translate("admin_slay_target", unturnedCaller.CharacterName));
+                Logger.Log(ProperSlay.Instance.Translations.Instance.Translate("admin_slay_log", unturnedCaller.CharacterName, unturnedCaller.SteamName, unturnedCaller.CSteamID, target.CharacterName, target.SteamName, target.CSteamID));
             }
             else
             {
-                RocketChat.Say(target.CSteamID, "Admin: Console has slayed you.");
-                Logger.Log(String.Format("Admin: Console, has slayed: {0} [{1}] ({2})", target.CharacterName, target.SteamName, target.CSteamID));
+                UnturnedChat.Say(target, ProperSlay.Instance.Translations.Instance.Translate("console_slay_target"));
+                Logger.Log(ProperSlay.Instance.Translations.Instance.Translate("console_slay_log", target.CharacterName, target.SteamName, target.CSteamID));
             }
         }
     }
