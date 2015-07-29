@@ -43,7 +43,6 @@ namespace PSlay
         public void Execute(IRocketPlayer caller, string[] command)
         {
             UnturnedPlayer target = command.GetUnturnedPlayerParameter(0);
-            UnturnedPlayer unturnedCaller = UnturnedPlayer.FromName(caller.Id);
             // Return help on empty command.
             if (command.Length == 0)
             {
@@ -74,8 +73,9 @@ namespace PSlay
                 return;
             }
             // Run with different messages, depending on whether the command was ran from the console, or by a player. If caller equals null, it was sent from the console.
-            if (caller != null)
+            if (!(caller is ConsolePlayer))
             {
+                UnturnedPlayer unturnedCaller = (UnturnedPlayer)caller;
                 UnturnedChat.Say(caller, ProperSlay.Instance.Translations.Instance.Translate("admin_slay_caller", target.CharacterName));
                 UnturnedChat.Say(target, ProperSlay.Instance.Translations.Instance.Translate("admin_slay_target", unturnedCaller.CharacterName));
                 Logger.Log(ProperSlay.Instance.Translations.Instance.Translate("admin_slay_log", unturnedCaller.CharacterName, unturnedCaller.SteamName, unturnedCaller.CSteamID, target.CharacterName, target.SteamName, target.CSteamID));
