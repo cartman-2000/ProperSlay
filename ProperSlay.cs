@@ -3,7 +3,7 @@ using Rocket.Core.Plugins;
 
 namespace PSlay
 {
-    public class ProperSlay : RocketPlugin
+    public class ProperSlay : RocketPlugin<ProperSlayConfig>
     {
         public static ProperSlay Instance;
 
@@ -21,6 +21,7 @@ namespace PSlay
                     { "slay_command_help", "<\"Playername\"|SteamID64> - Slays a player." },
                     { "too_many_args", "Too many arguments in the command." },
                     { "playername_not_found", "Cannot find player: {0}" },
+                    { "player_is_dead", "The player: {0} is already dead." },
                     { "admin_slay_caller", "You have slayed player: {0}." },
                     { "admin_slay_target", "Admin: {0} has slayed you." },
                     { "admin_slay_log", "Admin: {0} [{1}] ({2}), has slayed: {3} [{4}] ({5})" },
